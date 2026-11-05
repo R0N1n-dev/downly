@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="window_bg">#F4F9F1</color>
+    <color name="qa_sheet">#FFFFFF</color>
+    <color name="qa_bg">#F4F9F1</color>
+    <color name="qa_ink">#17262A</color>
+    <color name="qa_muted">#2F4448</color>
+    <color name="qa_line">#2417262A</color>
+    <color name="qa_chip_on">#17262A</color>
+    <color name="qa_chip_on_text">#F4F9F1</color>
+    <color name="qa_cta">#17262A</color>
+    <color name="qa_on_cta">#F4F9F1</color>
+    <color name="qa_error">#C42F48</color>
+    <color name="w_bg">#F4F9F1</color>
+    <color name="w_ink">#17262A</color>
+    <color name="w_muted">#2F4448</color>
+    <color name="w_track">#2917262A</color>
+    <color name="w_paste_bg">#17262A</color>
+    <color name="w_paste_text">#F4F9F1</color>
+    <color name="w_add_bg">#FFFFFF</color>
+    <color name="w_add_text">#17262A</color>
+    <color name="w_stroke">#2417262A</color>
+</resources>

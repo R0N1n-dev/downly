@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/w_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/w_bg"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <LinearLayout
+        android:id="@+id/w_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:importantForAccessibility="no"
+            android:src="@mipmap/ic_launcher"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:text="Downly"
+            android:textColor="@color/w_ink"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/w_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Idle"
+            android:textColor="@color/w_muted"
+            android:textSize="12sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/w_row1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingTop="8dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="8dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/w_name1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:textColor="#17262A"
+                android:textSize="13sp"/>
+
+            <ProgressBar
+                android:id="@+id/w_bar1"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:layout_marginTop="6dp"
+                android:max="100"
+                android:progressDrawable="@drawable/w_progress"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/w_pct1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="#17262A"
+            android:textSize="13sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/w_row2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingTop="8dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="8dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/w_name2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:textColor="#17262A"
+                android:textSize="13sp"/>
+
+            <ProgressBar
+                android:id="@+id/w_bar2"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:layout_marginTop="6dp"
+                android:max="100"
+                android:progressDrawable="@drawable/w_progress"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/w_pct2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="#17262A"
+            android:textSize="13sp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/w_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Nothing downloading. Paste a link to start."
+        android:textColor="@color/w_muted"
+        android:textSize="13sp"/>
+
+    <TextView
+        android:id="@+id/w_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:textColor="@color/w_muted"
+        android:textSize="12sp"
+        android:visibility="gone"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/w_paste"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight="2"
+            android:background="@drawable/w_btn_paste"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="Paste link"
+            android:textColor="@color/w_paste_text"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/w_add"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:background="@drawable/w_btn_add"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="Add"
+            android:textColor="@color/w_add_text"
+            android:textSize="14sp"/>
+    </LinearLayout>
+</LinearLayout>

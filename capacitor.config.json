@@ -1,0 +1,10 @@
+{
+  "appId": "com.devn1n.downly",
+  "appName": "Downly",
+  "webDir": "dist",
+  "plugins": {
+    "SystemBars": {
+      "insetsHandling": "disable"
+    }
+  }
+}

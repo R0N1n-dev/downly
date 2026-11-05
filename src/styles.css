@@ -1,0 +1,220 @@
+/* Downly design tokens.
+   Light: cool paper, ink text, one saturated blue.
+   Dark: deep ink navy, the same blue lifted for contrast. */
+
+@font-face { font-family: 'Satoshi'; src: url('/fonts/Satoshi-Variable.woff2') format('woff2'); font-weight: 300 900; font-display: swap; }
+@font-face { font-family: 'Cabinet Grotesk'; src: url('/fonts/CabinetGrotesk-Variable.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+
+:root {
+  /* Fallback only. theme.js sets every colour below at startup. This is Sorbet light. */
+  color-scheme: light;
+  --bg: #f4f9f1;
+  --surface: #ffffff;
+  --raised: #e8f0e4;
+  --line: rgba(23, 38, 42, 0.14);
+  --text: #17262a;
+  --muted: #2f4448;
+  --faint: var(--muted);
+  --accent: #17262a;
+  --on-accent: #f4f9f1;
+  --pill: #f9d96b;
+  --on-pill: #17262a;
+  --accent-soft: #f6e9a8;
+  --card-mix: 100%;
+  --cta-ring: transparent;
+  --good: #0b7f58;
+  --warn: #8f5c00;
+  --bad: #c42f48;
+  --ring: 0 0 0 1px var(--line);
+  --scrim: rgba(23, 31, 36, 0.45);
+
+  --display: 'Bricolage Grotesque Variable', Georgia, serif;
+  --ui: 'DM Sans Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --top: max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px));
+  --bottom: max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px));
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body { margin: 0; background: var(--bg); }
+
+body {
+  color: var(--text);
+  font: 400 16px/1.4 var(--ui);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+  user-select: none;
+}
+
+button, input { font: inherit; color: inherit; }
+button { border: 0; background: none; padding: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------- layout ---------- */
+
+.screen {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: calc(var(--top) + 12px) 16px calc(var(--bottom) + 128px);
+  min-height: 100dvh;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  margin-bottom: 8px;
+}
+
+.title {
+  margin: 0;
+  font: 800 30px/1.1 var(--display);
+  letter-spacing: -0.015em;
+}
+
+.lead { display: flex; align-items: center; gap: 4px; margin-left: -8px; }
+.tools { display: flex; gap: 4px; }
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  color: var(--muted);
+}
+.icon-btn:active { background: var(--raised); }
+
+/* ---------- grouped list ---------- */
+
+.group-title {
+  margin: 20px 4px 8px;
+  font: 600 13px/1 var(--ui);
+  color: var(--muted);
+}
+
+.group {
+  background: var(--surface);
+  border-radius: 22px;
+  box-shadow: var(--ring);
+  overflow: hidden;
+}
+
+.group > * + * { position: relative; }
+.group > * + *::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 72px;
+  right: 0;
+  border-top: 1px solid var(--line);
+}
+
+/* soft stacked cards for download rows */
+.cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+
+/* ---------- chips ---------- */
+
+.chips { display: flex; gap: 6px; overflow-x: auto; padding: 4px 0 2px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+
+.chip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 13.5px;
+  color: var(--muted);
+  background: var(--surface);
+  box-shadow: var(--ring);
+}
+.chip.on { background: var(--text); color: var(--bg); box-shadow: none; }
+.chip small { margin-left: 4px; opacity: 0.7; font-size: 12px; }
+
+/* ---------- buttons ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 15px;
+  background: var(--raised);
+  color: var(--text);
+  box-shadow: var(--ring);
+}
+.btn:active { transform: scale(0.98); }
+.btn.primary { background: var(--accent); color: var(--on-accent); box-shadow: inset 0 0 0 2px var(--cta-ring); }
+.btn.danger { color: var(--bad); }
+.btn.block { width: 100%; }
+
+/* ---------- search ---------- */
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 46px;
+  padding: 0 14px;
+  margin: 4px 0 8px;
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: var(--ring);
+  color: var(--muted);
+}
+.search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; color: var(--text); user-select: text; }
+
+/* ---------- empty ---------- */
+
+.empty { margin: 72px 24px 0; text-align: center; color: var(--muted); }
+.empty h2 { margin: 0 0 6px; font: 500 22px/1.2 var(--display); color: var(--text); }
+.empty p { margin: 0 0 20px; }
+
+/* ---------- toast + banner ---------- */
+
+.toast {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: calc(var(--bottom) + 96px);
+  max-width: 528px;
+  margin: 0 auto;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 14px;
+  z-index: 30;
+  animation: rise 0.2s ease-out;
+}
+
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 4px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--bad) 12%, var(--surface));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--bad) 30%, transparent);
+  font-size: 14px;
+}
+.banner span { flex: 1; word-break: break-word; }
+.banner button { font-weight: 600; color: var(--bad); padding: 8px; }
+
+@keyframes rise { from { transform: translateY(8px); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

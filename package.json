@@ -1,0 +1,31 @@
+{
+  "name": "downly",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "sync": "vite build && cap sync android",
+    "apk": "vite build && cap sync android && cd android && ./gradlew assembleDebug",
+    "check:theme": "node src/theme.check.mjs"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/core": "^8.0.0",
+    "@capacitor/haptics": "^8.0.2",
+    "@capacitor/share": "^8.0.3",
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/dm-sans": "^5.3.0",
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource-variable/outfit": "^5.3.0",
+    "@fontsource-variable/plus-jakarta-sans": "^5.3.0",
+    "lucide-vue-next": "^1.0.0",
+    "vue": "^3.5.22"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.0.0",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "vite": "^7.1.9"
+  }
+}
