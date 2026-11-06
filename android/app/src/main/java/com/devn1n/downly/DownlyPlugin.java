@@ -81,6 +81,69 @@ public class DownlyPlugin extends Plugin {
 
     // ------------------------------------------------------------ adding
 
+    // The photo picker reads the post natively: a WebView cannot fetch a cross-origin page.
+    // Parsing happens in the web bundle (src/lib/photos.js); this only returns { html, url }.
+    @PluginMethod
+    public void page(PluginCall call) {
+        final String uri = call.getString("uri", "").trim();
+        if (!uri.toLowerCase(java.util.Locale.ROOT).startsWith("http")) {
+            call.reject("Only http and https pages can be read");
+            return;
+        }
+        new Thread(() -> {
+            try {
+                JSONObject page = Photos.page(uri, new File(getContext().getFilesDir(), "cookies.txt"));
+                JSObject out = new JSObject();
+                for (java.util.Iterator<String> it = page.keys(); it.hasNext(); ) {
+                    String key = it.next();
+                    out.put(key, page.get(key));
+                }
+                call.resolve(out);
+            } catch (Exception e) {
+                call.reject(e.getMessage() == null ? "Could not read that page" : e.getMessage());
+            }
+        }).start();
+    }
+
+    // A batch of photos from one post. Each URL becomes an ordinary http download in the Images folder;
+    // there is no separate photo pipeline on the native side.
+    @PluginMethod
+    public void addPhotos(PluginCall call) {
+        try {
+            JSONArray items = call.getArray("items");
+            if (items == null || items.length() == 0) throw new Exception("Choose at least one photo");
+            final java.util.List<JSONObject> records = new java.util.ArrayList<>();
+            final java.util.Set<String> used = new java.util.HashSet<>();
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject item = items.optJSONObject(i);
+                if (item == null) continue;
+                String url = item.optString("url", "").trim();
+                if (!Downloads.valid(url) || url.toLowerCase(java.util.Locale.ROOT).startsWith("magnet:")) continue;
+                String name = unique(Downloads.cleanName(item.optString("name"), url), used);
+                records.add(Downloads.photo(getContext(), url, name));
+            }
+            if (records.isEmpty()) throw new Exception("No photo links to download");
+            Store.mutate(getContext(), all -> { for (JSONObject record : records) all.put(record); });
+            wakeService();
+            call.resolve();
+        } catch (Exception e) {
+            call.reject(e.getMessage() == null ? "Could not add the photos" : e.getMessage());
+        }
+    }
+
+    // "photo-1.jpg" twice in one post becomes "photo-1-2.jpg" instead of one file overwriting the other.
+    private static String unique(String name, java.util.Set<String> used) {
+        String key = name.toLowerCase(java.util.Locale.ROOT);
+        if (used.add(key)) return name;
+        int dot = name.lastIndexOf('.');
+        String base = dot > 0 ? name.substring(0, dot) : name;
+        String ext = dot > 0 ? name.substring(dot) : "";
+        for (int n = 2; ; n++) {
+            String candidate = base + "-" + n + ext;
+            if (used.add(candidate.toLowerCase(java.util.Locale.ROOT))) return candidate;
+        }
+    }
+
     @PluginMethod
     public void add(PluginCall call) {
         try {

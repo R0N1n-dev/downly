@@ -418,9 +418,17 @@ public class Aria2Service extends Service {
         JSONObject opts = new JSONObject();
         opts.put("gid", id);
         opts.put("dir", stageDir().getAbsolutePath());
-        opts.put("split", "8");
-        opts.put("max-connection-per-server", "8");
-        opts.put("min-split-size", "1M");
+        // A photo arrives over one connection: no splitting, no resume segments (matching SnapTube).
+        // Everything else keeps eight connections.
+        if ("image".equals(r.optString("content"))) {
+            opts.put("split", "1");
+            opts.put("max-connection-per-server", "1");
+            opts.put("min-split-size", "0");
+        } else {
+            opts.put("split", "8");
+            opts.put("max-connection-per-server", "8");
+            opts.put("min-split-size", "1M");
+        }
         if (paused) opts.put("pause", "true");
         if (r.optString("type").equals("torrent")) {
             File t = new File(getFilesDir(), "torrents/" + id + ".torrent");

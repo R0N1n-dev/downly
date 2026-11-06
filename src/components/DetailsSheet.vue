@@ -6,8 +6,9 @@ import Ring from './Ring.vue'
 import FileIcon from './FileIcon.vue'
 import {
   items, ui, pause, resume, remove, openFile, share, say,
-  size, rate, duration, percent, fullDate, folderLabel
+  size, rate, duration, percent, fullDate, saveLabel
 } from '../store.js'
+
 
 const emit = defineEmits(['close'])
 const sheet = ref(null)
@@ -78,7 +79,7 @@ async function del() {
         <div v-if="source" class="tap" @click="copy(source)">
           <dt>Source</dt><dd class="clip">{{ source }}<Copy :size="14" /></dd>
         </div>
-        <div><dt>Saves to</dt><dd>{{ folderLabel(it.folder) }}</dd></div>
+        <div><dt>Saves to</dt><dd>{{ saveLabel(it) }}</dd></div>
         <div><dt>Added</dt><dd>{{ fullDate(it.created) }}</dd></div>
       </dl>
     </template>

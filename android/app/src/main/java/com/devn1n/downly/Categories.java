@@ -36,6 +36,18 @@ final class Categories {
         return OTHER;
     }
 
+    static boolean isImage(String name) { return IMG.contains(ext(name)); }
+
+    // What the download is, for the library tab and for the finish step: image | audio | video | other.
+    // Derived from the file name only, never from a caller, so every path classifies the same way.
+    static String contentOf(String name) {
+        String category = ofFile(name);
+        if (category.equals(IMAGES)) return "image";
+        if (category.equals(MUSIC)) return "audio";
+        if (category.equals(VIDEO)) return "video";
+        return "other";
+    }
+
     // record type: http | magnet | torrent | video
     static String of(String recordType, String fileName) {
         if (recordType.equals("magnet") || recordType.equals("torrent")) return TORRENTS;

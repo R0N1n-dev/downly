@@ -39,7 +39,7 @@ const themes = [
     <div class="group" style="margin-top: 10px">
       <label class="line">
         <span class="ico"><FolderTree :size="20" /></span>
-        <span class="t"><b>Sort into category folders</b><small>{{ destBase }}/Video, Music, Documents, Compressed, Programs, Images, Torrents</small></span>
+        <span class="t"><b>Sort into category folders</b><small>{{ destBase }}/Video, Music, Documents, Compressed, Programs, Images, Torrents. Photos go to Pictures/Downly/Images so the gallery lists them.</small></span>
         <input class="switch" type="checkbox" role="switch" :checked="sortOn" @change="setSort($event.target.checked)" />
       </label>
       <button class="line" @click="ensureFolders">

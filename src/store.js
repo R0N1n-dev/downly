@@ -3,6 +3,7 @@ import { registerPlugin, SystemBars, SystemBarsStyle } from '@capacitor/core'
 import { Haptics, ImpactStyle } from '@capacitor/haptics'
 import { Share } from '@capacitor/share'
 import { THEMES, themeById, tokens, cssVars, HUE } from './theme.js'
+import { photosFromHtml, mediaName, isPhotoPage } from './lib/photos.js'
 
 export { THEMES, HUE }
 
@@ -60,6 +61,13 @@ export const folderLabel = raw => {
   return clean
 }
 
+// where a finished file actually landed. Images go to the Pictures collection (gallery indexed),
+// every other type goes to the Downloads collection.
+export const saveLabel = it =>
+  category(it) === 'image' && !it.folder
+    ? (sortOn.value ? 'Pictures/Downly/Images' : 'Pictures/Downly')
+    : folderLabel(it.folder)
+
 let toastTimer
 export function say(message) {
   toast.value = message
@@ -116,11 +124,38 @@ export const addLink = (uri, { video = isVideoLink(uri), mode = 'video', quality
 
 // what is this link? { kind: video | file | page | torrent | magnet | unknown, name, size, category }
 export const probe = uri => Downly.probe({ uri: uri.trim() }).catch(() => ({ kind: 'unknown' }))
+
+// Photo posts (Instagram carousels, pins, ...): the page source is fetched on the native side because a
+// WebView cannot read a cross-origin page, then parsed by src/lib/photos.js. An empty list means there is
+// nothing to show, so the Add sheet keeps its video options.
+export const canHavePhotos = uri => isPhotoPage(uri)
+export async function findPhotos(uri) {
+  try {
+    const r = await Downly.page({ uri: uri.trim() })
+    const pageUrl = r.url || uri
+    return photosFromHtml(r.html, pageUrl).map((m, i) => ({ ...m, name: mediaName(m, i, pageUrl) }))
+  } catch { return [] }
+}
+
+// Each photo becomes an ordinary http download in the Images folder; native derives the content type
+// from the file name, exactly like it does for any other link.
+export const addPhotos = media => run(async () => {
+  if (!media.length) return
+  await Downly.ensureNotifications()
+  await Downly.addPhotos({ items: media.map(m => ({ url: m.url, name: m.name })) })
+  buzz()
+})
+
 export const setSort = enabled => run(() => Downly.setSort({ enabled }))
 export const ensureFolders = () => run(() => Downly.ensureFolders())
 
 // folder shown for a category, e.g. "Downloads/Downly/Video"
-export const destFor = category => (sortOn.value && category ? `${destBase.value}/${category}` : destBase.value)
+export const destFor = category => {
+  // pictures live in the Pictures collection so the gallery lists them; Downloads is not indexed as photos
+  if (category === 'Images' && !folderRaw.value) return sortOn.value ? 'Pictures/Downly/Images' : 'Pictures/Downly'
+  return sortOn.value && category ? `${destBase.value}/${category}` : destBase.value
+}
+
 
 export const addTorrentFile = () =>
   run(async () => {

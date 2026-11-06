@@ -75,6 +75,7 @@ final class Store {
         r.put("gid", id);
         r.put("name", name);
         r.put("type", type);          // http | magnet | torrent
+        r.put("content", Categories.contentOf(name)); // image | audio | video | other, from the destination name
         r.put("uri", uri);
         r.put("folder", folder);      // SAF tree uri chosen at add time, "" = public Downloads
         r.put("want", "run");         // run | pause | remove

@@ -24,9 +24,23 @@ export class DownlyWeb {
     this.items.push({
       id: String(Math.random()).slice(2, 12), gid: '', name: video ? `Video from ${host}` : uri.split('/').pop() || uri,
       type: uri.startsWith('magnet:') ? 'magnet' : video ? 'video' : 'http', uri, folder: '', want: 'run', state: 'queued',
-      total: 0, done: 0, speed: 0, eta: -1, connections: 0, error: '', openUri: '', created: Date.now()
+      total: 0, done: 0, speed: 0, eta: -1, connections: 0, error: '', openUri: '', content: 'other', created: Date.now()
     })
   }
+  // the real plugin fetches the page and parses it; in the browser there is nothing to read
+  async page({ uri }) { return { html: '', url: uri } }
+  async addPhotos({ items }) {
+    for (const it of items || []) {
+      const ext = (String(it.name).split('.').pop() || '').toLowerCase()
+      this.items.push({
+        id: String(Math.random()).slice(2, 12), gid: '', name: it.name || 'photo.jpg', type: 'http', uri: it.url,
+        folder: '', want: 'run', state: 'queued', total: 0, done: 0, speed: 0, eta: -1, connections: 0,
+        error: '', openUri: '', content: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'heic'].includes(ext) ? 'image' : 'video',
+        created: Date.now()
+      })
+    }
+  }
+
   async pause({ id }) { this.state(id, 'paused') }
   async resume({ id }) { this.state(id, 'queued') }
   async remove({ id }) { this.items = this.items.filter(i => i.id !== id) }

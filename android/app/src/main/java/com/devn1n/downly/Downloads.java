@@ -50,6 +50,28 @@ final class Downloads {
         return p == null || p.isEmpty() ? uri : p;
     }
 
+    // A photo (or clip) lifted out of a post: an ordinary http download whose name already carries the
+    // extension, so the Images folder and the library tab follow from the file name like any other link.
+    static JSONObject photo(Context c, String uri, String name) throws Exception {
+        uri = uri.trim();
+        if (!valid(uri) || uri.toLowerCase(Locale.ROOT).startsWith("magnet:")) throw new Exception("Not a photo link");
+        return Store.create(Store.newId(), cleanName(name, uri), "http", uri,
+            c.getSharedPreferences("downly", Context.MODE_PRIVATE).getString("folder", ""));
+    }
+
+    // Web-supplied names become file names: no separators, no control characters, always an extension.
+    static String cleanName(String name, String uri) {
+        String n = name == null ? "" : name.trim().replaceAll("[\\\\/:*?\"<>|\\p{Cntrl}]", "_");
+        if (n.length() > 120) n = n.substring(n.length() - 120);
+        n = n.replaceAll("\\.+$", "");
+        if (n.isEmpty()) n = "photo";
+        if (Categories.ext(n).isEmpty()) {
+            String fromUrl = Categories.ext(urlName(uri));
+            n += "." + (fromUrl.isEmpty() ? "jpg" : fromUrl);
+        }
+        return n;
+    }
+
     // magnet: URIs are opaque, so Uri.getQueryParameter() throws on them. Parse dn= by hand.
     static String magnetName(String uri) {
         int q = uri.indexOf('?');

@@ -85,6 +85,24 @@ final class Folders {
         ContentResolver cr = c.getContentResolver();
 
         if (treeFolder.isEmpty()) {
+            // Finished photos belong in Pictures so the gallery (Photos app) indexes them; everything else
+            // goes under Downloads. MediaStore does not index getExternalFilesDir on API 29+, so the insert
+            // is the whole point — there is no side channel for images.
+            if (Categories.isImage(name)) {
+                ContentValues v = new ContentValues();
+                v.put(MediaStore.Images.Media.DISPLAY_NAME, name);
+                v.put(MediaStore.Images.Media.MIME_TYPE, mime);
+                v.put(MediaStore.Images.Media.RELATIVE_PATH,
+                    Environment.DIRECTORY_PICTURES + "/" + ROOT + "/Images");
+                v.put(MediaStore.Images.Media.IS_PENDING, 1);
+                Uri uri = cr.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, v);
+                if (uri == null) throw new Exception("Could not create a file in Pictures/Downly/Images");
+                copy(src, cr, uri);
+                ContentValues done = new ContentValues();
+                done.put(MediaStore.Images.Media.IS_PENDING, 0);
+                cr.update(uri, done, null, null);
+                return uri.toString();
+            }
             String path = Environment.DIRECTORY_DOWNLOADS + "/" + ROOT + (category.isEmpty() ? "" : "/" + category) + (parent.isEmpty() ? "" : "/" + parent);
             ContentValues v = new ContentValues();
             v.put(MediaStore.Downloads.DISPLAY_NAME, name);
